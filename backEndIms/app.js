@@ -1,9 +1,16 @@
 const express = require("express");
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 const authRoutes = require("./routes/authRoutes");
+const corsOptions = {
+  origin: ['http://localhost:5173', 'https://yourproductiondomain.com'],
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true // Allow cookies or authorization headers if needed
+};
 
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/auth", authRoutes);
 
