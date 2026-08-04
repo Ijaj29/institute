@@ -1,6 +1,7 @@
 import type { AuthSession, LoginCredentials } from '@/types/auth.types';
+import { sha512 } from 'js-sha512';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000/';
 
 class AuthApiError extends Error {
   constructor(message: string, public status?: number) {
@@ -20,17 +21,21 @@ export async function login(credentials: LoginCredentials): Promise<AuthSession>
     return mockLogin(credentials);
   }
 
-  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+  const response = await fetch(`${API_BASE_URL}auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      email: credentials.email,
-      password: credentials.password,
+      userid: credentials.email,
+      password: sha512(sha512(credentials.password) + "1234"),
     }),
   });
-
-  if (!response.ok) {
+  
+  debugger;
+  if (response.status === 401) {
     const payload = await response.json().catch(() => null);
+    if(payload?.statusMsg === 'Invalid email or password.') {
+      throw new AuthApiError('Invalid email or password.', 401);
+    }
     throw new AuthApiError(payload?.message ?? 'Invalid email or password.', response.status);
   }
 
