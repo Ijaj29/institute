@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-var DB = "ims";
+var url = process.env.MONGO_URI || "mongodb://localhost:27017/ims";
+var DB = process.env.MONGO_DB_NAME || "ims";
 var autoIncrement = require('mongodb-autoincrement');
 var Binary = require('mongodb').Binary;
 var fs = require('fs');

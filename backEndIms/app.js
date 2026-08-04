@@ -1,13 +1,14 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const authRoutes = require("./routes/authRoutes");
 const corsOptions = {
-  origin: ['http://localhost:5173', 'https://yourproductiondomain.com'],
+  origin: ['http://localhost:5173'],
   methods: 'GET,POST,PUT,DELETE',
-  credentials: true // Allow cookies or authorization headers if needed
+  credentials: true 
 };
 
 app.use(cors(corsOptions));
