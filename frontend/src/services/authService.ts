@@ -25,7 +25,7 @@ export async function login(credentials: LoginCredentials): Promise<AuthSession>
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      userid: credentials.email,
+      username: credentials.email,
       password: sha512(sha512(credentials.password) + "1234"),
     }),
   });
