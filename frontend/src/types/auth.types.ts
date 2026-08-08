@@ -4,11 +4,26 @@ export interface LoginCredentials {
   remember: boolean;
 }
 
-export interface AuthUser {
-  id: string;
+/** Shape of the claims embedded in the JWT payload — adjust keys to match your NestJS JwtService.sign() payload. */
+export interface AuthTokenPayload {
+  sub: string;
   name: string;
   email: string;
-  role: 'admin' | 'faculty' | 'staff' | 'student';
+  role: 'ADMIN' | 'faculty' | 'staff' | 'student';
+  instituteName: string;
+  iat: number;
+  exp: number;
+}
+
+export interface LoginResponse {
+  token: string;
+}
+
+export interface AuthUser {
+  userid: string;
+  name: string;
+  email: string;
+  role: 'ADMIN' | 'faculty' | 'staff' | 'student';
   instituteName: string;
 }
 

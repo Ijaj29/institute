@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { validateLoginForm } from '@/utils/validators';
 import { AuthApiError } from '@/services/authService';
 import type { LoginFormErrors } from '@/types/auth.types';
+import { sha512 } from 'js-sha512';
 
 export function LoginForm() {
   const { signIn, isAuthenticating } = useAuth();
@@ -20,9 +21,6 @@ export function LoginForm() {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    // navigate('/dashboard');
-    // return;
-
 
     // const validation = validateLoginForm(email, password);
     // if (Object.keys(validation).length > 0) {
@@ -32,7 +30,8 @@ export function LoginForm() {
 
     setErrors({});
     try {
-      await signIn({ email, password, remember });
+      debugger;
+      await signIn({ email, password: sha512(sha512(password) + "1234"), remember });
       navigate('/dashboard');
     } catch (err) {
       const message =

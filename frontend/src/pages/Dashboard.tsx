@@ -1,8 +1,17 @@
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
+import { sessionService } from '@/services/sessionService';
+
 
 export default function Dashboard() {
-  const { session, signOut } = useAuth();
+  const { user, signOut } = useAuth();
+  console.log('Auth user :', user);
+
+  const cookieUser = sessionService.getUser();
+  console.log('cookieUser :', cookieUser);
+
+
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-paper px-6">
@@ -11,11 +20,11 @@ export default function Dashboard() {
           Signed in
         </p>
         <h1 className="mt-2 font-display text-2xl text-ink-700">
-          Welcome, {session?.user.name}
+          Welcome,
         </h1>
-        <p className="mt-2 text-sm text-ink-400">{session?.user.instituteName}</p>
+        <p className="mt-2 text-sm text-ink-400"></p>
         <div className="mt-6">
-          <Button onClick={signOut}>Sign out</Button>
+          <Button onClick={() => signOut()}>Sign out</Button>
         </div>
       </div>
     </div>

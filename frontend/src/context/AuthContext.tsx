@@ -1,10 +1,10 @@
 import { createContext, useCallback, useMemo, useState, type ReactNode } from 'react';
-import type { AuthSession, LoginCredentials } from '@/types/auth.types';
+import type { AuthTokenPayload, LoginCredentials } from '@/types/auth.types';
 import { login as loginRequest } from '@/services/authService';
-import { clearSession, readSession, saveSession } from '@/utils/storage';
+import { sessionService } from '@/services/sessionService';
 
 interface AuthContextValue {
-  session: AuthSession | null;
+  user: AuthTokenPayload | null;
   isAuthenticating: boolean;
   signIn: (credentials: LoginCredentials) => Promise<void>;
   signOut: () => void;
@@ -12,39 +12,29 @@ interface AuthContextValue {
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-function loadInitialSession(): AuthSession | null {
-  const raw = readSession();
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as AuthSession;
-  } catch {
-    return null;
-  }
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<AuthSession | null>(loadInitialSession);
+  const [user, setUser] = useState<AuthTokenPayload | null>(() => sessionService.getUser());
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const signIn = useCallback(async (credentials: LoginCredentials) => {
     setIsAuthenticating(true);
     try {
-      const result = await loginRequest(credentials);
-      setSession(result);
-      saveSession(JSON.stringify(result), credentials.remember);
+      const { token } = await loginRequest(credentials);
+      sessionService.saveToken(token, credentials.remember); // cookie set here
+      setUser(sessionService.getUser()); // decoded straight from the token
     } finally {
       setIsAuthenticating(false);
     }
   }, []);
 
   const signOut = useCallback(() => {
-    setSession(null);
-    clearSession();
+    sessionService.clear();
+    setUser(null);
   }, []);
 
   const value = useMemo(
-    () => ({ session, isAuthenticating, signIn, signOut }),
-    [session, isAuthenticating, signIn, signOut],
+    () => ({ user, isAuthenticating, signIn, signOut }),
+    [user, isAuthenticating, signIn, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
