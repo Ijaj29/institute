@@ -1,3 +1,6 @@
+
+export type Role = 'ADMIN' | 'FACULTY' | 'STAFF' | 'STUDENT';
+
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -9,7 +12,7 @@ export interface AuthTokenPayload {
   sub: string;
   name: string;
   email: string;
-  role: 'ADMIN' | 'faculty' | 'staff' | 'student';
+  role: Role;
   instituteName: string;
   iat: number;
   exp: number;
@@ -23,7 +26,7 @@ export interface AuthUser {
   userid: string;
   name: string;
   email: string;
-  role: 'ADMIN' | 'faculty' | 'staff' | 'student';
+  role: Role;
   instituteName: string;
 }
 

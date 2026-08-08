@@ -8,6 +8,8 @@ import { validateLoginForm } from '@/utils/validators';
 import { AuthApiError } from '@/services/authService';
 import type { LoginFormErrors } from '@/types/auth.types';
 import { sha512 } from 'js-sha512';
+import { getDashboardPathForRole } from '@/utils/roleRoutes';
+import { sessionService } from '@/services/sessionService';
 
 export function LoginForm() {
   const { signIn, isAuthenticating } = useAuth();
@@ -30,9 +32,11 @@ export function LoginForm() {
 
     setErrors({});
     try {
-      debugger;
       await signIn({ email, password: sha512(sha512(password) + "1234"), remember });
-      navigate('/dashboard');
+      // navigate('/dashboard');
+      const user = sessionService.getUser(); // <-- this line must be present before it's used below
+      navigate(getDashboardPathForRole(user?.role), { replace: true });
+
     } catch (err) {
       const message =
         err instanceof AuthApiError ? err.message : 'Something went wrong. Please try again.';
