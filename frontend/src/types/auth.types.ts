@@ -11,6 +11,7 @@ export interface LoginCredentials {
 export interface AuthTokenPayload {
   sub: string;
   name: string;
+  unm: string;
   email: string;
   role: Role;
   instituteName: string;

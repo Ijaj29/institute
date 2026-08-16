@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --sidebar-bg: 220 24% 12%;
+  --sidebar-fg: 40 20% 94%;
+  --sidebar-border: 220 20% 20%;
+  --sidebar-accent: 43 46% 51%;
+  --sidebar-accent-fg: 220 24% 12%;
+}
+
+/* dark theme just deepens the same palette — sidebar already reads dark by default */
+.dark {
+  --sidebar-bg: 220 30% 8%;
+  --sidebar-fg: 40 20% 90%;
+  --sidebar-border: 220 20% 16%;
+  --sidebar-accent: 43 46% 51%;
+  --sidebar-accent-fg: 220 24% 10%;
+}
+
 html,
 body,
 #root {
@@ -11,6 +28,11 @@ body,
 body {
   @apply font-body text-ink-700 antialiased;
 }
+
+body {
+  @apply font-body text-ink-700 antialiased bg-paper dark:bg-ink-900 dark:text-paper transition-colors;
+}
+
 
 ::selection {
   @apply bg-brass-100 text-ink-700;

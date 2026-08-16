@@ -11,16 +11,6 @@ interface ProtectedRouteProps {
   allowedRoles?: Role[];
 }
 
-// export function ProtectedRoute({ children }: { children: ReactNode }) {
-//   const { user } = useAuth();
-
-//   if (!user) {
-//     return <Navigate to="/login" replace />;
-//   }
-
-//   return <>{children}</>;
-// }
-
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
   const { user } = useAuth();
