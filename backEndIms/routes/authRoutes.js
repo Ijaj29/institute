@@ -4,7 +4,7 @@ var sha512 = require('js-sha512');
 var auth = require('../models/BAL/authBal');
 var jwtHelper = require('../models/middleWare/jwtHelper');
 
-router.post('/login', function (req, res, next) {
+router.post('/login', function (req, res) {
   auth.getUserDetailsByUserID(req.body.username, async function (response) {
     if (response.length == 0) {
       return res.status(401).json({ statusMsg: 300, msg: 'Unauthorized' });

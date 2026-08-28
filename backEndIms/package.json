@@ -11,7 +11,11 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "biguint-format": "^1.0.2",
+    "body-parser": "^2.3.0",
+    "cache-headers": "^1.1.1",
     "cors": "^2.8.6",
+    "csurf": "^1.11.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "i": "^0.3.7",

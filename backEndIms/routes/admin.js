@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var csrf = require('csurf');
-var csrfProtection = csrf({  cookie: {secure: true, httpOnly: true,sameSite: "strict"}});
+var csrfProtection = csrf({ cookie: { secure: true, httpOnly: true, sameSite: "strict" } });
 var parseForm = bodyParser.urlencoded({ extended: false });
 const cache = require('cache-headers');
 var permit = require('../models/middleWare/permission');
 const { verifyToken } = require('../models/middleWare/jwtHelper');
-var crypto = require('crypto'),
-  format = require('biguint-format'),
-const axios = require('axios');
+var crypto = require('crypto');
+var format = require('biguint-format');
+var admin = require('../models/BAL/adminBal');
 
 
 const overrideConfig = {
@@ -30,6 +30,32 @@ function random(low, high) {
 
 
 
-router.get('/addAnalyst', verifyToken, permit.permission("ADMIN"), csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res) {
-    return res.status(200).json({ statusMsg: 200, msg: 'Dashboard'});
+router.get('/dashboard', verifyToken, permit.permission("ADMIN"), csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res) {
+  return res.status(200).json({ statusMsg: 200, msg: 'Dashboard' });
 });
+
+router.post('/addAnalyst', verifyToken, permit.permission("ADMIN"), csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res) {
+  try {
+    admin.addAnalyst(req.body, async function (response) {
+        return res.status(200).json({ statusMsg: 200, msg: response });
+    });
+  } catch (err) {
+    console.error('Login token generation failed:', err);
+    return res.status(500).json({ statusMsg: 500, msg: 'Token generation failed' });
+  }
+});
+
+router.get('/getAnalyst', verifyToken, permit.permission("ADMIN"), csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res) {
+  try {
+    admin.getAnalyst(function (response, err) {
+        if (err) {
+          return res.status(500).json({ statusMsg: 500, msg: 'Unable to fetch analysts' });
+        }
+        return res.status(200).json(response);
+    });
+  } catch (err) {
+    return res.status(500).json({ statusMsg: 500, msg: 'Unable to fetch analysts' });
+  }
+});
+
+module.exports = router;

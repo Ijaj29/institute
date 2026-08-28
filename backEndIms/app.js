@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const app = express();
 const authRoutes = require("./routes/authRoutes");
+const adminRoutes = require("./routes/admin");
 const corsOptions = {
   origin: ['http://localhost:5173'],
   methods: 'GET,POST,PUT,DELETE',
@@ -14,6 +15,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
 
 app.get('/test', (req, res) => {
     res.send("Test complete");
