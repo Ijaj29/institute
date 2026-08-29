@@ -14,6 +14,7 @@
     "biguint-format": "^1.0.2",
     "body-parser": "^2.3.0",
     "cache-headers": "^1.1.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "csurf": "^1.11.0",
     "dotenv": "^17.4.2",
